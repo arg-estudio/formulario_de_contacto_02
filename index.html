@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Formulario Responsivo</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+		
+		body {
+			background-image: url("media/fondo.jpg");
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-ms-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			background-attachment: fixed;
+			background-repeat: no-repeat;
+			background-position: bottom center;
+			color: #FFFFFF;
+			font-weight: 400;
+			font-family: 'Muli', sans-serif;
+		}
+		#contacto {
+			position: relative;
+			width: 85%;
+			margin-left: 5%;
+			margin-top: 5%; 
+		}
+		#contacto input {
+			font-family: 'Muli', sans-serif;
+			font-weight: 400;
+			border: 0px;
+			width: 90%;
+			margin-bottom: 20px;
+			height: 20px;
+			padding: 12px 20px 12px 50px;
+			border-radius: 50px;
+			font-size: 12px;
+			background-repeat: no-repeat;
+			background-position: 10px 0px;
+		}
+		#contacto textarea {
+			font-family: 'Muli', sans-serif;
+			font-weight: 400;
+			border: 0px;
+			width: 90%;
+			margin-bottom: 20px;
+			height: 150px;
+			padding: 12px 20px 12px 50px;
+			border-radius: 20px;
+			font-size: 12px;
+			background-repeat: no-repeat;
+			background-position: -45px -55px;
+		}
+		#enviar {
+			max-width: 50%;
+			min-height: 40px;
+			margin-left: 25%;
+			padding: 0px !important;
+		}
+		.nombre {
+			background-image: url("media/user.svg");
+		}
+		.email {
+			background-image: url("media/mail.svg");
+		}
+		.telefono {
+			background-image: url("media/mobile.svg");
+		}
+		.mensaje {
+			background-image: url("media/sticker.svg");
+		}
+		
+		@media only screen and (min-width: 768px) {
+			#contacto {
+				width: 50%;
+				margin-left: 25%;
+			}
+			#contacto input {
+				width: 100%;
+			}
+			#contacto textarea {
+				width: 100%;
+			}
+		}
+ 	</style>
+</head>
+
+<body>
+	<div id="contacto">
+		<input type="text" name="nombre" id="nombre" class="nombre" placeholder="Nombre">
+		<input type="text" name="email" id="email" class="email" placeholder="E-Mail">
+		<input type="number" name="telefono" id="telefono" class="telefono" placeholder="Teléfono">
+		<textarea type="text" name="mensaje" id="mensaje" class="mensaje" placeholder="Mensaje"></textarea>
+		<input type="submit" name="enviar" id="enviar" class="enviar" onClick="sendContact();" value="Enviar">
+	</div>
+	<div id="estatus"></div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js"></script>
+	<script src="http://malsup.github.com/jquery.form.js"></script>
+	
+	<script>
+		function sendContact() {
+			var valid;
+			valid = validateContact();
+			if(valid) {
+				jQuery.ajax({
+					url: "mail.php",
+					data: "nombre="+$("#nombre").val()+
+						  "email="+$("#email").val()+
+						  "telefono="+$("#telefono").val()+
+						  "mensaje="+$("#mensaje").val(),
+					type: "POST",
+					success:function(data) {
+						$("#estatus").hide().html(data).fadeIn(1000);
+						$("#contacto").hide();
+					}
+				})
+			}
+		}
+		
+		function validateContact() {
+			var valid = true;
+			
+			if(!$("#nombre").val()) {
+				$("#nombre").css("background-color","#FFFFDF");
+				valid = false;
+			}
+			
+			if(!$("#email").val()) {
+				$("#email").css("background-color","#FFFFDF");
+				valid = false;
+			}
+			
+			if(!$("#email").val().match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+				$("#email").css("background-color","#FFFFDF");
+				valid = false;
+			})
+			
+			if(!$("#telefono").val()) {
+				$("#telefono").css("background-color","#FFFFDF");
+				valid = false;
+			}
+			
+			if(!$("#mensaje").val()) {
+				$("#mensaje").css("background-color","#FFFFDF");
+				valid = false;
+			}
+			
+			return valid;
+		}
+	</script>
+	
+</body>
+</html>
